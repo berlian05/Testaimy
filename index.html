@@ -195,31 +195,54 @@
             <section id="dashboard" class="section">
                 <h1>Дашборд</h1>
                 
-                <!-- KPI показатели (на всю ширину) -->
+                <!-- KPI показатели -->
                 <div class="kpi-widgets">
-                    <div class="kpi-card">
+                    <button class="kpi-card active" data-chart="salesChart">
                         <i class="fas fa-chart-line"></i>
                         <h3>Продажи</h3>
                         <p class="kpi-value">55 договоров</p>
                         <p class="kpi-change positive">+15% с прошлого месяца</p>
-                    </div>
-                    <div class="kpi-card">
+                    </button>
+                    <button class="kpi-card" data-chart="callsChart">
                         <i class="fas fa-phone"></i>
                         <h3>Звонки</h3>
                         <p class="kpi-value">324</p>
                         <p class="kpi-change positive">+8% с прошлой недели</p>
-                    </div>
-                    <div class="kpi-card">
+                    </button>
+                    <button class="kpi-card" data-chart="conversionChart">
                         <i class="fas fa-percentage"></i>
                         <h3>Конверсия</h3>
                         <p class="kpi-value">36%</p>
                         <p class="kpi-change positive">+5% с прошлого месяца</p>
-                    </div>
-                    <div class="kpi-card">
+                    </button>
+                    <button class="kpi-card" data-chart="activityChart">
                         <i class="fas fa-user-check"></i>
                         <h3>Активность</h3>
                         <p class="kpi-value">78%</p>
                         <p class="kpi-change positive">+5% с прошлого месяца</p>
+                    </button>
+                </div>
+
+                <!-- Графики -->
+                <div class="dashboard-charts">
+                    <div class="chart-container" id="salesChartContainer">
+                        <h2>Динамика продаж</h2>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container" id="callsChartContainer">
+                        <h2>Динамика звонков</h2>
+                        <canvas id="callsChart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container" id="conversionChartContainer">
+                        <h2>Динамика конверсии</h2>
+                        <canvas id="conversionChart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container" id="activityChartContainer">
+                        <h2>Динамика активности</h2>
+                        <canvas id="activityChart"></canvas>
                     </div>
                 </div>
 
@@ -353,14 +376,9 @@
                                                 title="Анализ">
                                             <i class="fas fa-chart-line"></i>
                                         </button>
-                                        <button onclick="playAudio('./audio/out-89090179800-034-20241030-112210-1730287329.436360.wav')" 
-                                                class="btn btn-success" 
-                                                title="Прослушать">
-                                            <i class="fas fa-phone"></i>
-                                        </button>
-                                        <button onclick="showTranscript('./transcriptions/out-89090179800-034-20241030-112210-1730287329.436360_transcript.html')" 
+                                        <button onclick="showTranscriptWithAudio('./audio/out-89090179800-034-20241030-112210-1730287329.436360.wav', './transcriptions/out-89090179800-034-20241030-112210-1730287329.436360_transcript.html')" 
                                                 class="btn btn-info" 
-                                                title="Транскрипция">
+                                                title="Транскрипция и аудио">
                                             <i class="fas fa-file-alt"></i>
                                         </button>
                                     </div>
@@ -380,14 +398,9 @@
                                                 title="Анализ">
                                             <i class="fas fa-chart-line"></i>
                                         </button>
-                                        <button onclick="playAudio('./audio/out-89871937584-034-20241030-122602-1730291162.436958.wav')" 
-                                                class="btn btn-success" 
-                                                title="Прослушать">
-                                            <i class="fas fa-phone"></i>
-                                        </button>
-                                        <button onclick="showTranscript('./transcriptions/out-89871937584-034-20241030-122602-1730291162.436958_transcript.html')" 
+                                        <button onclick="showTranscriptWithAudio('./audio/out-89871937584-034-20241030-122602-1730291162.436958.wav', './transcriptions/out-89871937584-034-20241030-122602-1730291162.436958_transcript.html')" 
                                                 class="btn btn-info" 
-                                                title="Транскрипция">
+                                                title="Транскрипция и аудио">
                                             <i class="fas fa-file-alt"></i>
                                         </button>
                                     </div>
@@ -865,15 +878,12 @@
         </div>
     </div>
 
-    <!-- Модальное окно для аудио -->
-    <div id="audioModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <audio id="audioPlayer" controls style="width: 100%;">
-                <source id="audioSource" src="" type="audio/wav">
-                Ваш браузер не поддерживает аудиоэлемент.
-            </audio>
-        </div>
+    <!-- Оставляем только этот аудио плеер -->
+    <div id="audioPlayerContainer" class="audio-player-container">
+        <audio id="audioPlayer" controls style="width: 100%;">
+            <source id="audioSource" src="" type="audio/wav">
+            Ваш браузер не поддерживает аудиоэлемент.
+        </audio>
     </div>
 
     <script src="js/config.js"></script>

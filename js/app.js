@@ -1,193 +1,337 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const salesCtx = document.getElementById('salesChart').getContext('2d');
-    
     const dates = Array.from({length: 14}, (_, i) => {
         const date = new Date();
         date.setDate(date.getDate() - (13 - i));
         return `${date.getDate()}.${date.getMonth() + 1}`;
     });
 
-    const contractsData = [
-        2, 1, 3, 5, 4, 3, 3, 5, 4, 5, 3, 3, 2, 2
-    ];
-
-    const salesChart = new Chart(salesCtx, {
+    // Общие настройки для всех графиков
+    const chartConfig = {
         type: 'line',
-        data: {
-            labels: dates,
-            datasets: [{
-                label: 'Количество договоров',
-                data: contractsData,
-                borderColor: '#1E3B6C',
-                backgroundColor: 'rgba(43, 125, 225, 0.15)',
-                fill: true,
-                tension: 0.3,
-                borderWidth: 2,
-                pointRadius: 3,
-                pointBackgroundColor: '#1E3B6C',
-                pointBorderColor: '#1E3B6C',
-                pointBorderWidth: 1.5,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: '#1E3B6C',
-                pointHoverBorderColor: '#FFFFFF',
-                pointHoverBorderWidth: 2,
-            }]
-        },
         options: {
             responsive: true,
             maintainAspectRatio: true,
-            aspectRatio: 2.5,
+            aspectRatio: 3,
             layout: {
                 padding: {
-                    left: 50,
-                    right: 20,
+                    left: 10,
+                    right: 10,
                     top: 20,
-                    bottom: 60
+                    bottom: 10
                 }
             },
             scales: {
                 y: {
-                    beginAtZero: true,
-                    suggestedMin: -0.5,
-                    suggestedMax: 6,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                        drawBorder: false
+                    },
                     ticks: {
-                        stepSize: 1,
-                        padding: 15,
-                        callback: function(value) {
-                            if (value >= 0) {
-                                return value + ' дог.';
-                            }
-                        },
                         font: {
                             size: 11
-                        },
-                        color: '#1E3B6C'
-                    },
-                    grid: {
-                        color: 'rgba(43, 125, 225, 0.1)',
-                        drawBorder: false
+                        }
                     }
                 },
                 x: {
                     grid: {
                         display: false
-                    },
-                    ticks: {
-                        font: {
-                            size: 11,
-                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
-                        },
-                        color: 'var(--accent-blue)'
                     }
                 }
             },
             plugins: {
                 legend: {
+                    position: 'top',
+                    align: 'start',
                     labels: {
-                        font: {
-                            size: 12,
-                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                            weight: '500'
-                        },
-                        usePointStyle: true,
+                        boxWidth: 12,
                         padding: 15,
-                        color: '#333'
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                    titleColor: '#333',
-                    bodyColor: '#333',
-                    titleFont: {
-                        size: 12,
-                        weight: '600',
-                        family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
-                    },
-                    bodyFont: {
-                        size: 11,
-                        family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
-                    },
-                    padding: 10,
-                    displayColors: false,
-                    borderColor: 'rgba(0, 0, 0, 0.1)',
-                    borderWidth: 1,
-                    callbacks: {
-                        label: function(context) {
-                            return `Договоров: ${context.raw}`;
+                        font: {
+                            size: 11
                         }
                     }
                 }
+            }
+        }
+    };
+
+    // График продаж
+    const salesChart = new Chart(document.getElementById('salesChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Количество договоров',
+                data: [2, 1, 3, 5, 4, 3, 3, 5, 4, 5, 3, 3, 2, 2],
+                borderColor: '#1E3B6C',
+                backgroundColor: 'rgba(30, 59, 108, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 2,
+                pointRadius: 4,
+                pointBackgroundColor: '#1E3B6C',
+                pointBorderColor: '#1E3B6C',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 3.5,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    min: 0,
+                    max: 6,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            return value + ' дог.';
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
             },
-            interaction: {
-                intersect: false,
-                mode: 'nearest'
-            },
-            elements: {
-                line: {
-                    capBezierPoints: true
+            plugins: {
+                legend: {
+                    position: 'top',
+                    align: 'start',
+                    labels: {
+                        boxWidth: 12,
+                        usePointStyle: true,
+                        padding: 20
+                    }
                 }
             }
         }
     });
 
-    salesCtx.canvas.style.height = '250px';
-    // Инициализация графика сравнительного анализа
-    const comparisonCtx = document.getElementById('comparisonChart').getContext('2d');
-    const comparisonChart = new Chart(comparisonCtx, {
+    // График звонков
+    const callsChart = new Chart(document.getElementById('callsChart').getContext('2d'), {
         type: 'line',
         data: {
-            labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн'],
+            labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл'],
             datasets: [
                 {
                     label: 'Текущий период',
-                    data: [33, 35, 38, 34, 37, 39],
-                    borderColor: 'var(--primary-color)',
-                    backgroundColor: 'rgba(30, 59, 108, 0.1)',
+                    data: [280, 290, 310, 295, 320, 315, 325],
+                    borderColor: '#4DD0E1',
+                    backgroundColor: 'rgba(77, 208, 225, 0.1)',
                     fill: true,
-                    tension: 0.3,
+                    tension: 0.4,
                     borderWidth: 2,
+                    pointRadius: 4,
                 },
                 {
                     label: 'Предыдущий период',
-                    data: [31, 34, 36, 32, 35, 37],
-                    borderColor: 'var(--accent-blue)',
-                    backgroundColor: 'rgba(43, 125, 225, 0.1)',
+                    data: [260, 270, 290, 275, 300, 295, 305],
+                    borderColor: '#FF6B8A',
+                    backgroundColor: 'rgba(255, 107, 138, 0.1)',
                     fill: true,
-                    tension: 0.3,
+                    tension: 0.4,
                     borderWidth: 2,
+                    pointRadius: 4,
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: true,
-            aspectRatio: 2.5,
+            aspectRatio: 3.5,
             scales: {
                 y: {
-                    beginAtZero: false,
-                    suggestedMin: 20,
-                    suggestedMax: 30,
+                    min: 200,
+                    max: 400,
                     ticks: {
-                        callback: function(value) {
-                            return value + '%';
-                        }
+                        stepSize: 20,
+                        callback: value => value + ' зв.'
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
                     }
                 }
             },
             plugins: {
                 legend: {
-                    position: 'top'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': ' + context.raw + '%';
-                        }
+                    position: 'top',
+                    align: 'start',
+                    labels: {
+                        boxWidth: 12,
+                        usePointStyle: true,
+                        padding: 20
                     }
                 }
             }
         }
     });
+
+    // График конверсии
+    const conversionChart = new Chart(document.getElementById('conversionChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл'],
+            datasets: [
+                {
+                    label: 'Текущий период',
+                    data: [32, 33, 34, 36, 35, 36, 38],
+                    borderColor: '#4DD0E1',
+                    backgroundColor: 'rgba(77, 208, 225, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                },
+                {
+                    label: 'Предыдущий период',
+                    data: [30, 31, 32, 33, 32, 34, 35],
+                    borderColor: '#FF6B8A',
+                    backgroundColor: 'rgba(255, 107, 138, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 3.5,
+            scales: {
+                y: {
+                    min: 25,
+                    max: 40,
+                    ticks: {
+                        stepSize: 5,
+                        callback: value => value + '%'
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    align: 'start',
+                    labels: {
+                        boxWidth: 12,
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                }
+            }
+        }
+    });
+
+    // График активности
+    const activityChart = new Chart(document.getElementById('activityChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл'],
+            datasets: [
+                {
+                    label: 'Текущий период',
+                    data: [75, 76, 78, 77, 79, 78, 80],
+                    borderColor: '#4DD0E1',
+                    backgroundColor: 'rgba(77, 208, 225, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                },
+                {
+                    label: 'Предыдущий период',
+                    data: [70, 72, 73, 74, 75, 76, 77],
+                    borderColor: '#FF6B8A',
+                    backgroundColor: 'rgba(255, 107, 138, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: 3.5,
+            scales: {
+                y: {
+                    min: 60,
+                    max: 90,
+                    ticks: {
+                        stepSize: 10,
+                        callback: value => value + '%'
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    align: 'start',
+                    labels: {
+                        boxWidth: 12,
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                }
+            }
+        }
+    });
+
+    // Функция переключения графиков
+    function switchChart(chartId) {
+        document.querySelectorAll('.chart-container').forEach(container => {
+            container.classList.remove('active');
+        });
+        
+        const selectedChart = document.querySelector(`#${chartId}Container`);
+        if (selectedChart) {
+            selectedChart.classList.add('active');
+        }
+
+        document.querySelectorAll('.kpi-card').forEach(card => {
+            card.classList.remove('active');
+            if (card.dataset.chart === chartId) {
+                card.classList.add('active');
+            }
+        });
+    }
+
+    // Обработчики событий
+    document.querySelectorAll('.kpi-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const chartId = card.dataset.chart;
+            switchChart(chartId);
+        });
+    });
+
+    // Показываем первый график по умолчанию
+    switchChart('salesChart');
 });
 
 function showAnalysis(url) {
@@ -213,17 +357,35 @@ function showAnalysis(url) {
     }
 }
 
-function showTranscript(url) {
+function showTranscriptWithAudio(audioUrl, transcriptUrl) {
+    // Показываем и настраиваем аудио плеер
+    const audioContainer = document.getElementById('audioPlayerContainer');
+    const audioPlayer = document.getElementById('audioPlayer');
+    const audioSource = document.getElementById('audioSource');
+    
+    audioSource.src = audioUrl;
+    audioPlayer.load();
+    
+    // Показываем транскрипцию
     const modal = document.getElementById('transcriptModal');
     const iframe = document.getElementById('transcriptFrame');
     const closeBtn = modal.querySelector('.close');
-
-    iframe.src = url;
+    
+    iframe.src = transcriptUrl;
     modal.style.display = 'block';
+    modal.classList.add('transcript-modal');
+    
+    // Показываем аудио плеер после открытия модального окна
+    setTimeout(() => {
+        audioContainer.classList.add('visible');
+    }, 100);
 
     // Закрытие по клику на крестик
     closeBtn.onclick = function() {
         modal.style.display = 'none';
+        modal.classList.remove('transcript-modal');
+        audioContainer.classList.remove('visible');
+        audioPlayer.pause();
         iframe.src = '';
     }
 
@@ -231,32 +393,10 @@ function showTranscript(url) {
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = 'none';
-            iframe.src = '';
-        }
-    }
-}
-
-function playAudio(url) {
-    const modal = document.getElementById('audioModal');
-    const audioPlayer = document.getElementById('audioPlayer');
-    const audioSource = document.getElementById('audioSource');
-    const closeBtn = modal.querySelector('.close');
-
-    audioSource.src = url;
-    audioPlayer.load();
-    modal.style.display = 'block';
-
-    // Закрытие по клику на крестик
-    closeBtn.onclick = function() {
-        modal.style.display = 'none';
-        audioPlayer.pause();
-    }
-
-    // Закрытие по клику вне модального окна
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
+            modal.classList.remove('transcript-modal');
+            audioContainer.classList.remove('visible');
             audioPlayer.pause();
+            iframe.src = '';
         }
     }
 }
