@@ -1,0 +1,2083 @@
+/* Основные переменные */
+:root {
+    --primary-color: #1E3B6C;    /* Темно-синий основной */
+    --secondary-color: #0A244D;  /* Более темный синий */
+    --background-light: #FFFFFF;
+    --background-dark: #0A1525;  /* Очень темный синий */
+    --text-light: #FFFFFF;
+    --text-dark: #0A1525;
+    --accent-blue: #2B7DE1;     /* Яркий голубой акцент */
+    --sidebar-width: 250px;
+    --header-height: 60px;
+  }
+
+/* Светлая тема (по умолчанию) */
+body {
+  --background: var(--background-light);
+  --text-color: var(--text-dark);
+}
+
+/* Темная тема */
+body[data-theme="dark"] {
+  --background: var(--background-dark);
+  --text-color: var(--accent-blue);
+}
+
+/* Применяем цвета темы */
+body {
+  background-color: var(--background);
+  color: var(--text-color);
+}
+
+.main-content {
+  background-color: var(--background);
+  color: var(--text-color);
+}
+
+/* Стили для кнопки переключения темы */
+.theme-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.theme-toggle:hover {
+  background: var(--accent-blue);
+}
+
+/* Общие стили */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--background-light);
+  color: var(--text-dark);
+}
+
+/* Лейаут */
+.main-container {
+  display: flex;
+  min-height: 100vh;
+  padding-top: var(--header-height);
+}
+
+/* Стили для свернутого состояния */
+.main-container.sidebar-collapsed {
+  grid-template-columns: 60px 1fr;
+}
+
+/* Шапка */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: #000000;
+  border-bottom: 1px solid var(--accent-blue);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 48px;
+  color: var(--text-light);
+}
+
+.logo {
+  flex-shrink: 0;
+  margin-right: 16px;
+}
+
+.functions-panel {
+  flex: 1;
+  margin: 0 24px !important;
+  background: var(--accent-blue) !important;
+  padding: 4px 12px !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-box {
+  display: flex !important;
+  align-items: center !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 6px !important;
+  padding: 4px 12px !important;
+  height: 32px !important;
+  width: 100% !important;
+}
+
+.search-box i {
+  color: #ffffff !important;
+  margin-right: 8px !important;
+}
+
+.search-box input {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  width: 100% !important;
+  outline: none !important;
+}
+
+.search-box input::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.header-controls button {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 14px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 15px;
+  background: rgba(30, 59, 108, 0.1);
+  border-radius: 20px;
+  min-width: 180px;
+  max-width: 250px;
+}
+
+.user-profile img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-blue);
+  flex-shrink: 0;
+}
+
+.user-profile span {
+  color: var(--text-light);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+  font-size: 13px;
+}
+
+/* Боковое меню */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 48px;
+  width: var(--sidebar-width);
+  height: calc(100vh - 48px);
+  background: var(--background-dark);
+  transition: width 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Стили для свернутой панели */
+.sidebar.collapsed {
+  width: 60px;
+}
+
+/* Стили для кнопки сворачивания */
+.sidebar-toggle {
+  padding: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  border-bottom: 1px solid rgba(30, 59, 108, 0.1);
+}
+
+.sidebar-toggle i {
+  transition: transform 0.3s ease;
+}
+
+/* Поворот иконки при сворачивании */
+.sidebar.collapsed .sidebar-toggle i {
+  transform: rotate(180deg);
+}
+
+/* Стили для навигации */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+}
+
+/* Стили для пунктов меню */
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: var(--text-light);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.sidebar-nav a:hover {
+  background: rgba(30, 59, 108, 0.1);
+}
+
+/* Стили для текста в пунктах меню */
+.sidebar-nav span {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+  transition-delay: 0.1s;
+  margin-left: 15px;
+}
+
+/* Скрываем текст при сворачивании */
+.sidebar.collapsed .sidebar-nav span {
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+/* Стили для иконок */
+.sidebar-nav i {
+  width: 20px;
+  text-align: center;
+  margin-right: 15px;
+  transition: margin 0.3s ease;
+}
+
+/* Убираем отступ у иконок при сворачивании */
+.sidebar.collapsed .sidebar-nav i {
+  margin-right: 0;
+}
+
+/* Кнопки */
+button {
+  background-color: #1E3B6C; /* Цвет кнопки (красный) */
+  color: white; /* Цвет текста кнопки */
+  padding: 10px; /* Отступы внутри кнопки */
+  border: none; /* Без границы */
+  border-radius: 4px; /* Закругленные углы */
+  cursor: pointer; /* Указатель при наведении */
+  width: 50%; /* Ширина 100% */
+}
+
+button:hover {
+  background-color: #0A244D; /* Цвет кнопки при наведении (красный) */
+}
+
+/* Компоненты */
+.widget {
+  background: var(--background-dark);
+  color: var(--text-light);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border: 1px solid rgba(30, 59, 108,0.1);
+}
+
+.widget h3 {
+  color: var(--text-light);
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+/* Таблицы */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th {
+  background: var(--background-dark);
+  color: var(--text-light);
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(30, 59, 108,0.1);
+}
+
+/* Модальные окна */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 2% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 100%;
+  max-height: 95vh;
+  border-radius: 8px;
+}
+
+.close-modal {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-dark);
+}
+
+/* Уведомления */
+.notifications-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.notification {
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background: var(--background-dark);
+  color: var(--text-light);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  min-width: 300px;
+}
+
+.notification.error {
+  border-left: 4px solid var(--accent-blue);
+}
+
+.notification.info {
+  border-left: 4px solid var(--primary-color);
+}
+
+/* Loader */
+.spinner {
+  border: 4px solid var(--background-light);
+  border-top: 4px solid var(--accent-blue);
+}
+
+/* нимации */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Адаптивная верстка */
+@media (max-width: 768px) {
+  .main-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar.active {
+    transform: translateX(0);
+  }
+}
+
+/* Дополнительные стили для активных ементов */
+.active {
+  background-color: var(--accent-blue);
+  color: var(--text-light);
+}
+
+/* Стили для заголовков */
+h1, h2, h3 {
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+
+/* и для граф и диаграмм */
+.chart {
+  border: 1px solid var(--accent-blue);
+  border-radius: 4px;
+  padding: 15px;
+}
+
+/* Стили для форм */
+input, select, textarea {
+  border: 1px solid var(--accent-blue);
+  padding: 8px 12px;
+  border-radius: 4px;
+  background: var(--background-light);
+  color: var(--text-dark);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+}
+
+/* Стили для основного контента */
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 24px;
+  min-height: calc(100vh - var(--header-height));
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: 60px;
+}
+
+/* Стили для виджетов */
+.kpi-widgets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.kpi-card {
+  background: var(--background);
+  border: 1px solid rgba(30, 59, 108, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  min-width: 0;
+}
+
+.kpi-card:hover {
+  transform: translateY(-5px);
+}
+
+.kpi-card i {
+  font-size: 24px;
+  color: var(--accent-blue);
+  margin-bottom: 10px;
+}
+
+.kpi-value {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.kpi-change {
+  font-size: 14px;
+}
+
+.kpi-change.positive {
+  color: #00C853;
+}
+
+.kpi-change.negative {
+  color: #FF3D00;
+}
+
+/* Стили для графиков */
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.chart-container {
+  background: var(--background);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid rgba(30, 59, 108, 0.1);
+}
+
+/* Стили для статистики звонков */
+.calls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.calls-card {
+  background: var(--background);
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  border: 1px solid rgba(30, 59, 108, 0.1);
+}
+
+/* Стили для последних активностей */
+.activity-list {
+  margin-top: 20px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid rgba(30, 59, 108, 0.1);
+}
+
+.activity-item i {
+  color: var(--accent-blue);
+  font-size: 20px;
+  margin-right: 15px;
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-details span {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+  
+  .kpi-widgets {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Стил для секции анализа звонков */
+.calls-filters {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(30, 59, 108, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  width: 100% !important;
+  max-width: 1200px !important;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 300px;
+}
+
+.filter-input {
+  padding: 8px 12px;
+  border: 1px solid rgba(30, 59, 108, 0.2);
+  border-radius: 4px;
+  background: var(--background);
+  color: var(--text-color);
+  min-width: 200px;
+}
+
+.date-separator {
+  color: var(--text-color);
+  margin: 0 4px;
+}
+
+.apply-filters {
+  padding: 8px 16px;
+  background: var(--accent-blue);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+  justify-content: center;
+}
+
+/* Стили для страницы Виртуального тренера */
+.trainer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 24px;
+}
+
+.trainer-card {
+    background: var(--background);
+    border: 1px solid rgba(30, 59, 108, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.card-header {
+    padding: 20px;
+    margin-bottom: 24px; /* Увеличиваем отступ после заголовка */
+    background: rgba(30, 59, 108, 0.05);
+    border-radius: 8px;
+}
+
+.card-content {
+    padding: 0 20px 20px; /* Добавляем отступы по бокам и снизу */
+}
+
+.start-scenario, .start-session, .continue-exercise {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.start-scenario:hover, .start-session:hover, .continue-exercise:hover {
+    background: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+.exercise {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 10px;
+}
+
+.exercise h3 {
+    margin-bottom: 16px;
+    color: var(--text-color);
+}
+
+.progress-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.stat {
+    text-align: center;
+    padding: 20px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 10px;
+}
+
+.stat .label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.stat .value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--accent-blue);
+}
+
+/* Заголовки секций */
+.trainer-card h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-color);
+}
+
+.trainer-card h2 i {
+    color: var(--accent-blue);
+}
+
+/* Сценарии обучения */
+.scenarios-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* Увеичиваем отступы между элементами списка */
+}
+
+.scenario-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+}
+
+/* Рейтинг сотрудников */
+.rating-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.rating-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 8px;
+}
+
+.position {
+    font-weight: bold;
+    margin-right: 20px;
+    color: var(--accent-blue);
+}
+
+.name {
+    flex-grow: 1;
+}
+
+.score {
+    font-weight: bold;
+    color: var(--accent-blue);
+}
+
+/* AI-коучинг */
+.ai-coach {
+    text-align: center;
+    padding: 20px;
+}
+
+.start-session {
+    margin-bottom: 16px;
+    padding: 12px 24px;
+    font-size: 16px;
+    width: auto;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .trainer-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .progress-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Стили для страницы отчетов */
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    padding: 20px;
+}
+
+.report-card {
+    background: var(--background);
+    border: 1px solid rgba(30, 59, 108, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Стили для кнопок генерации отчетов */
+.generate-report {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+}
+
+/* Стили для кнопок экспорта */
+.export-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.export-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: var(--primary-color); /* Было #FF0000 */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.export-btn:hover {
+    background-color: var(--secondary-color); /* Было #B30000 */
+    transform: translateY(-1px);
+}
+
+/* Обновляем цвета для конкретных кнопок */
+.export-btn.excel {
+    background-color: var(--primary-color); /* Было #FF0000 */
+}
+
+.export-btn.pdf {
+    background-color: var(--primary-color); /* Было #FF0000 */
+}
+
+.export-btn.csv {
+    background-color: var(--primary-color); /* Было #FF0000 */
+}
+
+/* При наведении */
+.export-btn.excel:hover,
+.export-btn.pdf:hover,
+.export-btn.csv:hover {
+    background-color: var(--secondary-color); /* Было #B30000 */
+}
+/* Стили для настройки расписания */
+.schedule-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.schedule-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Стили для шаблонов */
+.templates-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.template-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 6px;
+}
+
+.template-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.add-template {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border: 2px dashed rgba(30, 59, 108, 0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Обновляем стили для иконок экспорта */
+.fas.fa-file-export {
+    font-size: 24px; /* Увеличим размер иконки */
+    margin-right: 12px; /* Добавляем отступ справа */
+}
+
+/* Также обновим стили для всех иконок экспорта файлов */
+.fas.fa-file-excel,
+.fas.fa-file-pdf,
+.fas.fa-file-csv {
+    font-size: 20px; /* Размер иконк форматов файлов */
+    margin-right: 10px;
+}
+
+/* Обновляем стили для контейнера с иконкой */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* Увеличиваем расстояние между иконкой и текстом */
+    padding: 20px;
+}
+
+/* Стили для кнопок экспорта */
+.export-btn {
+    font-size: 16px; /* Увеличиваем размер текста */
+    padding: 14px 20px; /* Увеличиваем padding для кнопок */
+}
+
+/* Обновляем общие стили для картоек отчетов */
+.report-card {
+    background: var(--background);
+    border: 1px solid rgba(30, 59, 108, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+/* Обновляем стили для всех заголовков и иконок */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.card-header i {
+    font-size: 24px; /* Увеличиваем размер всех иконок */
+    color: var(--accent-blue);
+}
+
+.card-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Обновляем стили для типов отчетов */
+.report-type {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 10px;
+}
+
+.report-type h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.report-type p {
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+/* Обновляем стили для всх кнопок */
+.generate-report,
+.export-btn,
+.save-schedule,
+.edit-template,
+.delete-template {
+    font-size: 16px;
+    padding: 14px 20px;
+    border-radius: 8px;
+}
+
+/* Стили для настройки расписания */
+.schedule-item {
+    padding: 20px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.schedule-item label {
+    font-size: 16px;
+    margin-right: 16px;
+}
+
+.schedule-item input,
+.schedule-item select {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(30, 59, 108, 0.1);
+    margin-right: 16px;
+}
+
+/* Стили для шаблонов */
+.template-item {
+    padding: 16px;
+    font-size: 16px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.template-actions button {
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 6px;
+    margin-left: 12px;
+}
+
+.add-template {
+    font-size: 16px;
+    padding: 16px;
+    gap: 12px;
+}
+
+.add-template i {
+    font-size: 20px;
+}
+
+/* Обновляем стили для всех интерактивных элементов */
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Отступы между секциями */
+.reports-grid {
+    gap: 30px;
+    padding: 24px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-header h2 {
+        font-size: 18px;
+    }
+    
+    .report-type h3 {
+        font-size: 16px;
+    }
+}
+
+/* Стили для страницы аналитики */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    padding: 24px;
+}
+
+.analytics-card {
+    background: var(--background);
+    border: 1px solid rgba(30, 59, 108, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.card-header i {
+    font-size: 24px;
+    color: var(--accent-blue);
+}
+
+.card-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.stat-item {
+    padding: 20px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 12px 0;
+    color: var(--accent-blue);
+}
+
+.visualization-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: rgba(30, 59, 108, 0.05);
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background: var(--accent-blue);
+    color: white;
+}
+
+/* Обновляем стили для card-content и его элементов */
+.card-content {
+    padding: 20px;
+}
+
+/* Стили для статистики */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    padding: 20px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 10px;
+    text-align: left; /* Выравнивание текста по левому краю */
+}
+
+.stat-item h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: var(--text-color);
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--accent-blue);
+    margin: 8px 0;
+}
+
+.stat-change {
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+/* Стили для сравнительного анализа */
+.comparison-chart {
+    margin-bottom: 20px;
+    height: 300px; /* Фиксированная высота для графика */
+}
+
+.comparison-legend {
+    display: flex;
+    justify-content: flex-start; /* Выравнивание легенды по левому краю */
+    gap: 24px;
+    padding: 16px 0;
+}
+
+/* Стили для прогнозирования */
+.forecast-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.metric {
+    padding: 20px;
+    background: rgba(30, 59, 108, 0.02);
+    border-radius: 10px;
+    text-align: left;
+}
+
+.metric h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.metric-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--accent-blue);
+    margin: 8px 0;
+}
+
+.metric-period {
+    font-size: 14px;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Стили для визуализации */
+.visualization-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.visualization-content {
+    height: 300px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: rgba(30, 59, 108, 0.05);
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .stats-container,
+    .forecast-metrics {
+        grid-template-columns: 1fr;
+    }
+    
+    .visualization-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        flex: 1 1 auto;
+    }
+}
+
+/* Стили для панели функций */
+.functions-panel {
+    background: var(--background);
+    padding: 12px 24px;
+    border-top: 1px solid rgba(30, 59, 108, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Стили для оиска */
+.search-container {
+    flex: 1;
+    max-width: 600px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(30, 59, 108, 0.05);
+    border-radius: 8px;
+    padding: 8px 16px;
+}
+
+.search-box input {
+    border: none;
+    background: none;
+    padding: 8px;
+    width: 100%;
+    font-size: 16px;
+}
+
+/* Стили для панели инструментов */
+.tools-container {
+    display: flex;
+    gap: 16px;
+}
+
+.tool-item {
+    position: relative;
+}
+
+.tool-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 1px solid rgba(30, 59, 108, 0.1);
+    border-radius: 6px;
+    background: var(--background);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tool-btn:hover {
+    background: rgba(30, 59, 108, 0.05);
+}
+
+/* Стили для выпадающих меню */
+.tool-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--background);
+    border: 1px solid rgba(30, 59, 108, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 200px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.tool-item:hover .tool-dropdown {
+    display: block;
+}
+
+/* Стили ля опций в выпадающих меню */
+.filter-group,
+.view-settings {
+    margin-bottom: 16px;
+}
+
+.filter-group h3,
+.view-settings h3 {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sort-option,
+.export-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sort-option:hover,
+.export-option:hover {
+    background: rgba(30, 59, 108, 0.05);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .functions-panel {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px 16px;
+    }
+
+    .search-container {
+        width: 100%;
+    }
+
+    .tools-container {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+/* Стили для выпадающео списка ильтров */
+.search-filters {
+    position: relative;
+}
+
+.filter-btn {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.filter-btn:hover {
+    color: var(--accent-blue);
+}
+
+.filter-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #000000; /* Чёрный фон */
+    border: 1px solid var(--accent-blue);
+    border-radius: 8px;
+    padding: 8px 0;
+    min-width: 180px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    margin-top: 4px;
+}
+
+.filter-dropdown.active {
+    display: block;
+}
+
+.filter-dropdown label {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    color: #ffffff; /* Белый текст */
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+/* Добавляем красный цвет для текста при активном состоянии */
+.filter-dropdown.active label {
+    color: var(--accent-blue) !important;
+}
+
+.filter-dropdown label:hover {
+    background: rgba(30, 59, 108, 0.2); /* Красноватый оттенок при наведении */
+}
+
+.filter-dropdown input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: var(--accent-blue); /* Цвет чекбокса */
+}
+
+/* тили для кнопки фильтров */
+.filter-btn {
+    color: #ffffff !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 4px !important;
+    padding: 4px 8px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-size: 14px !important;
+}
+
+.filter-btn:hover {
+    background: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Обновляем стили для страницы анализа звонков */
+#calls {
+    padding: 24px;
+    background: #000000;
+    border-radius: 12px;
+}
+
+/* Стили для заголовка */
+#calls h1 {
+    color: #ffffff;
+    margin-bottom: 24px;
+    font-size: 24px;
+}
+
+/* Стили для таблицы звонков */
+.calls-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    margin-top: 16px;
+}
+
+.calls-table tr {
+    background: #1a1a1a;
+    transition: background 0.3s ease;
+}
+
+.calls-table tr:hover {
+    background: #2a2a2a;
+}
+
+.calls-table td {
+    padding: 16px;
+    color: #ffffff;
+    border: none;
+}
+
+/* Стили для оценки */
+.calls-table td:nth-child(5) {
+    color: var(--accent-blue);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Стили для статуса */
+.calls-table td:nth-child(6) {
+    color: var(--accent-blue);
+    font-weight: 500;
+}
+/* Стили для AI-анализа */
+.ai-analysis {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 24px;
+    color: #ffffff;
+}
+
+.ai-analysis h2 {
+    color: var(--accent-blue);
+    margin-bottom: 16px;
+    font-size: 20px;
+}
+
+/* Стили для рекомендаций */
+.recommendations {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 16px;
+    color: #ffffff;
+}
+
+.recommendations h2 {
+    color: var(--accent-blue);
+    margin-bottom: 16px;
+}
+
+.recommendations ul {
+    list-style: none;
+    padding: 0;
+}
+
+.recommendations li {
+    margin-bottom: 12px;
+    padding-left: 24px;
+    position: relative;
+}
+
+.recommendations li:before {
+    content: '•';
+    color: var(--accent-blue);
+    position: absolute;
+    left: 8px;
+}
+
+/* Добавляем стили для настроек темы */
+.theme-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(30, 59, 108, 0.05);
+    border-radius: 8px;
+}
+
+.color-picker-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.color-picker-group label {
+    min-width: 150px;
+    color: var(--text-color);
+}
+
+.color-picker-group input[type="color"] {
+    width: 50px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.reset-color {
+    padding: 8px 16px;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reset-color:hover {
+    background: var(--secondary-color);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .color-picker-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Добавляем стили для настроек аккаунта */
+.account-settings {
+    padding: 20px;
+    background: rgba(30, 59, 108, 0.05);
+    border-radius: 8px;
+}
+
+.settings-group {
+    margin-bottom: 20px;
+}
+
+.settings-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.input-group {
+    display: flex;
+    gap: 12px;
+}
+
+.input-group input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid rgba(30, 59, 108, 0.2);
+    border-radius: 4px;
+    background: var(--background);
+    color: var(--text-color);
+}
+
+.save-settings {
+    padding: 8px 16px;
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-settings:hover {
+    background: var(--secondary-color);
+}
+
+/* Обновляем стили для input[type="date"] */
+.input-group input[type="date"] {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid rgba(30, 59, 108, 0.2);
+    border-radius: 4px;
+    background: var(--background);
+    color: var(--text-color);
+    font-family: inherit;
+}
+
+.input-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(var(--calendar-invert));
+    cursor: pointer;
+}
+
+/* Добавляем переменную для инвертирования календаря в темной теме */
+body[data-theme="dark"] {
+    --calendar-invert: 1;
+}
+
+body[data-theme="light"] {
+    --calendar-invert: 0;
+}
+
+/* Обновляем стили для модального окна на странице анализа звонков */
+.modal-content {
+    background: var(--background-light);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+}
+
+/* Добавляем стили для текста в модальном окне */
+.modal-content,
+.modal-content h2,
+.modal-content h3,
+.modal-content h4,
+.modal-content p,
+.modal-content span,
+.modal-content label,
+.modal-content div {
+    color: #000000 !important;
+}
+
+/* Стили для метрик в модальном окне */
+.modal-content .metrics-grid .metric label,
+.modal-content .metrics-grid .metric span {
+    color: #000000 !important;
+}
+
+/* Стили для рекомендаций в модальном окне */
+.modal-content .recommendations-list h4,
+.modal-content .recommendations-list p {
+    color: #000000 !important;
+}
+
+/* Обновляем стили для AI-анализа и рекомендаций */
+.ai-analysis-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.analysis-card {
+    background: #1a1a1a;
+    border: 1px solid rgba(30, 59, 108, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.analysis-card h3 {
+    color: #ffffff !important;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.metric {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.metric label {
+    display: block;
+    color: #ffffff !important;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.metric span {
+    color: var(--accent-blue) !important;
+    font-weight: 500;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin: 8px 0;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: var(--accent-blue);
+    border-radius: 3px;
+}
+
+/* Стили для рекомендаций */
+.recommendations-card {
+    background: #1a1a1a;
+    border: 1px solid rgba(30, 59, 108, 0.1);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.recommendations-card h3 {
+    color: #ffffff !important;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.recommendations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.recommendations-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.recommendations-list i {
+    color: var(--accent-blue);
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+.recommendations-list h4 {
+    color: #ffffff !important;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.recommendations-list p {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    border: 1px solid var(--accent-blue);
+    border-radius: 8px;
+    background: var(--background-light);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--accent-blue);
+    border-radius: 4px;
+}
+
+body {
+    background-color: #f0f0f0; /* Светлый фон */
+    font-family: Arial, sans-serif; /* Шрифт */
+}
+
+h1 {
+    color: #333; /* Цвет заголовка */
+    text-align: center; /* Центрирование заголовка */
+}
+
+form {
+    background-color: #fff; /* Белый фон для формы */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень */
+    padding: 20px; /* Отступы внутри формы */
+    max-width: 400px; /* Максимальная ширина формы */
+    margin: 20px auto; /* Центрирование формы */
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* Ширина 100% */
+    padding: 10px; /* Отступы внутри полей */
+    margin: 10px 0; /* Отступы между полями */
+    border: 1px solid #ccc; /* Цвет границы */
+    border-radius: 4px; /* Закругленные углы */
+}
+
+button {
+    background-color: #2B7DE1; /* Цвет кнопки */
+    color: white; /* Цвет текста кнопки */
+    padding: 10px; /* Отступы внутри кнопки */
+    border: none; /* Без границы */
+    border-radius: 4px; /* Закругленные углы */
+    cursor: pointer; /* Указатель при наведении */
+
+}
+
+button:hover {
+    background-color: #a90606; /* Цвет кнопки при наведении */
+}
+
+.login-error {
+    color: red; /* Цвет текста ошибки */
+    text-align: center; /* Центрирование текста шибки */
+}
+
+/* Стили для модального окна анализа диалога */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-height: 90vh;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+.metrics-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.metric {
+    background: rgba(30, 59, 108,0.1);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.progress-bar {
+    background: rgba(255,255,255,0.1);
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.progress {
+    background: var(--accent-blue);
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.progress-value {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    min-width: 150px;
+    margin-left: auto;
+}
+
+.actions .btn {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.actions .btn:hover {
+    opacity: 0.9;
+}
+
+/* Добавляем text-align для ячейки с классом actions */
+td.actions {
+    text-align: right;
+    padding-right: 20px;  /* Добавляем отступ справа */
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    min-width: 150px;
+    margin-left: auto;
+}
+
+/* Также можно добавить фиксированную ширину для колонки статуса */
+td[data-status] {
+    width: 120px;  /* Или другое подходящее значение */
+}
+
+/* Увеличим размер iframe */
+#analysisFrame {
+    width: 100%;
+    height: 85vh;
+    border: none;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    min-width: 150px;
+}
+
+th:last-child {
+    text-align: right !important;
+    padding-right: 20px !important;
+}
+
+td:last-child {
+    text-align: right !important;
+    padding-right: 20px !important;
+}
+
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+}

@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aimy.expert</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/virtual-trainer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="api-base-url" content="/api">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/main.js"></script>
+    <style>
+        /* Стили для всех секций */
+        .section {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: none; /* Скрываем все секции по умолчанию */
+        }
+
+        /* Стили для основного контейнера */
+        .main-content {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Стили для контейнера с сеткой */
+        .dashboard-layout,
+        .analytics-grid,
+        .reports-grid,
+        .trainer-grid {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Предотвращение горизонтальной прокрутки для всех карточек */
+        .kpi-card,
+        .dashboard-charts,
+        .calls-stats,
+        .analytics-card,
+        .report-card,
+        .trainer-card {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Фиксированная ширина таблиц */
+        .calls-table-container {
+            width: 100%;
+            overflow-x: auto; /* Оставляем прокрутку только для таблиц */
+        }
+
+        /* Новые стили для предотвращения горизонтальной прокрутки */
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .main-container {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        section {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100%;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+
+        .main-content {
+            overflow-x: hidden;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        /* Принудительное ограничение ширины для всех дочерних элементов */
+        .main-content > * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Разрешаем горизонтальную прокрутку только для таблиц */
+        .calls-table-container {
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        #dashboard {
+            display: block; /* Показываем дашборд по умолчанию */
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <!-- Шапка -->
+    <header class="header">
+        <div class="logo">
+            <img src="images/logo.png" alt="ИИ РОП & ВЕКТОР" style="height: 40px;">
+        </div>
+        
+        <!-- Перемещаем functions-panel в одну строку -->
+        <div class="functions-panel">
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Писк по сайту...">
+                    <div class="search-filters">
+                        <button class="filter-btn" style="margin-right: 109px;" id="filterToggle">
+                            <i class="fas fa-filter"></i>
+                            Фильтры
+                        </button>
+                        <div class="filter-dropdown" id="filterDropdown">
+                            <label><input type="checkbox" value="calls"> Звонки</label>
+                            <label><input type="checkbox" value="reports"> Отчеты</label>
+                            <label><input type="checkbox" value="analytics"> Аналитика</label>
+                            <label><input type="checkbox" value="training"> Обучение</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="header-controls">
+            <button class="notifications">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="user-profile" style="border-radius: 10px;">
+                <img src="avatar.jpg" alt="">
+                <span>Администратор</span>
+            </button>
+            <button class="theme-toggle">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Боковая панель -->
+        <aside class="sidebar">
+            <!-- Навигация -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="#dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Дашборд</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#calls">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>Анализ звонков</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#trainer">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Виртуальный тренер</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#reports">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Отчеты</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#analytics">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Аналитика</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Настройки</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- Содержимое секций -->
+            <section id="dashboard" class="section">
+                <h1>Дашборд</h1>
+                
+                <!-- KPI показатели (на всю ширину) -->
+                <div class="kpi-widgets">
+                    <div class="kpi-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Продажи</h3>
+                        <p class="kpi-value">55 договоров</p>
+                        <p class="kpi-change positive">+15% с прошлого месяца</p>
+                    </div>
+                    <div class="kpi-card">
+                        <i class="fas fa-phone"></i>
+                        <h3>Звонки</h3>
+                        <p class="kpi-value">324</p>
+                        <p class="kpi-change positive">+8% с прошлой недели</p>
+                    </div>
+                    <div class="kpi-card">
+                        <i class="fas fa-percentage"></i>
+                        <h3>Конверсия</h3>
+                        <p class="kpi-value">36%</p>
+                        <p class="kpi-change positive">+5% с прошлого месяца</p>
+                    </div>
+                    <div class="kpi-card">
+                        <i class="fas fa-user-check"></i>
+                        <h3>Активность</h3>
+                        <p class="kpi-value">78%</p>
+                        <p class="kpi-change positive">+5% с прошлого месяца</p>
+                    </div>
+                </div>
+
+                <!-- Разделение на ве колонки -->
+                <div class="dashboard-layout">
+                    <!-- Левая колонка -->
+                    <div class="dashboard-column">
+                        <!-- График продаж -->
+                        <div class="dashboard-charts">
+                            <div class="chart-container" style="height: 400px; width: 100%; max-width: 1600px; overflow: hidden;">
+                                <h2>Динамика продаж</h2>
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Статистика звонков -->
+                        <div class="calls-stats">
+                            <h2>Статистика звонков</h2>
+                            <div class="calls-grid">
+                                <div class="calls-card">
+                                    <h4>Входящие</h4>
+                                    <p>156 звонков</p>
+                                </div>
+                                <div class="calls-card">
+                                    <h4>Исходящие</h4>
+                                    <p>168 звонков</p>
+                                </div>
+                                <div class="calls-card">
+                                    <h4>Среднее время</h4>
+                                    <p>4:23 мин</p>
+                                </div>
+                                <div class="calls-card">
+                                    <h4>Пропущенные</h4>
+                                    <p>12 звонк</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Правая колонка -->
+                    <div class="dashboard-column">
+                        <!-- График эффективности -->
+
+
+                        <!-- Последние активности -->
+                        <div class="recent-activities">
+                            <h2>Последние активности</h2>
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <i class="fas fa-phone-alt"></i>
+                                    <div class="activity-details">
+                                        <p>Звонок клиенту Aimy</p>
+                                        <span>15 минут назад</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <i class="fas fa-file-signature"></i>
+                                    <div class="activity-details">
+                                        <p>Новая сделка: Контракт №127</p>
+                                        <span>2 часа назад</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <i class="fas fa-tasks"></i>
+                                    <div class="activity-details">
+                                        <p>Завершено обучение: "Работа с возражениями"</p>
+                                        <span>4 часа назад</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Добавляем новую секцию для анализа звонков -->
+            <section id="calls" class="section">
+                <h1>Анализ звонков</h1>
+
+                <!-- Фильтры -->
+                <div class="calls-filters">
+                    <div class="filter-group" style="width: 530px; border-radius: 8px;">
+                        <div class="date-range">
+                            <input type="date" id="dateFrom" class="filter-input" placeholder="От">
+                            <span class="date-separator">—</span>
+                            <input type="date" id="dateTo" class="filter-input" placeholder="До">
+                        </div>
+                        <select id="teamFilter" class="filter-input">
+                            <option value="all">Все команды</option>
+                            <option value="sirens">Команда 1</option>
+                            <option value="bossgirl">Команда 2</option>
+                            <option value="mayatnik">Команда 3</option>
+                            <option value="queens">Команда 4</option>
+                        </select>
+                        <select id="managerFilter" class="filter-input">
+                            <option value="all">Все менеджеры</option>
+                        </select>
+                        <button class="apply-filters" style="width: 120px;">
+                            <i class="fas fa-search"></i>
+                            Найти
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Таблица звонков -->
+                <div class="calls-table-container">
+                    <table class="calls-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="date">Дата <i class="fas fa-sort"></i></th>
+                                <th data-sort="manager">Менеджер <i class="fas fa-sort"></i></th>
+                                <th data-sort="client">Клиент <i class="fas fa-sort"></i></th>
+                                <th data-sort="phone">Телефон <i class="fas fa-sort"></i></th>
+                                <th data-sort="duration">Длительность <i class="fas fa-sort"></i></th>
+                                <th data-sort="status">Статус <i class="fas fa-sort"></i></th>
+                                <th style="text-align: right; padding-right: 20px; color: white;">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-date="2024-03-12">29.11.2024</td>
+                                <td data-manager="Иваов">Соколова Юлия</td>
+                                <td data-client="Вектор">Ирина</td>
+                                <td>+7 (909) 017-98-00</td>
+                                <td data-duration="323">5:23</td>
+                                <td data-status="success"><span class="status success">Успешно</span></td>
+                                <td style="text-align: right; padding-right: 20px;">
+                                    <div class="action-buttons">
+                                        <button onclick="showAnalysis('./analysis/out-89090179800-034-20241030-112210-1730287329.436360_analysis.html')" 
+                                                class="btn btn-primary" 
+                                                title="Анализ">
+                                            <i class="fas fa-chart-line"></i>
+                                        </button>
+                                        <button onclick="playAudio('./audio/out-89090179800-034-20241030-112210-1730287329.436360.wav')" 
+                                                class="btn btn-success" 
+                                                title="Прослушать">
+                                            <i class="fas fa-phone"></i>
+                                        </button>
+                                        <button onclick="showTranscript('./transcriptions/out-89090179800-034-20241030-112210-1730287329.436360_transcript.html')" 
+                                                class="btn btn-info" 
+                                                title="Транскрипция">
+                                            <i class="fas fa-file-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-date="2024-03-12">02.12.2024</td>
+                                <td data-manager="Петров">Соколова Юлия</td>
+                                <td data-client="Альфа">Анастасия</td>
+                                <td>+7 (987) 193-75-84</td>
+                                <td data-duration="245">4:05</td>
+                                <td data-status="success"><span class="status success">Успешно</span></td>
+                                <td style="text-align: right; padding-right: 20px;">
+                                    <div class="action-buttons">
+                                        <button onclick="showAnalysis('./analysis/out-89871937584-034-20241030-122602-1730291162.436958_analysis.html')" 
+                                                class="btn btn-primary" 
+                                                title="Анализ">
+                                            <i class="fas fa-chart-line"></i>
+                                        </button>
+                                        <button onclick="playAudio('./audio/out-89871937584-034-20241030-122602-1730291162.436958.wav')" 
+                                                class="btn btn-success" 
+                                                title="Прослушать">
+                                            <i class="fas fa-phone"></i>
+                                        </button>
+                                        <button onclick="showTranscript('./transcriptions/out-89871937584-034-20241030-122602-1730291162.436958_transcript.html')" 
+                                                class="btn btn-info" 
+                                                title="Транскрипция">
+                                            <i class="fas fa-file-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- AI-анализ и рекомендации -->
+                <div class="ai-analysis-container">
+                    <div class="analysis-card">
+                        <h3>AI-анализ посленего разговора</h3>
+                        <div class="metrics-grid">
+                            <div class="metric">
+                                <label>Скрипт продаж</label>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 85%"></div>
+                                </div>
+                                <span>85%</span>
+                            </div>
+                            <div class="metric">
+                                <label>Работа с возражениями</label>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 75%"></div>
+                                </div>
+                                <span>75%</span>
+                            </div>
+                            <!-- Добавьте больше метрик -->
+                        </div>
+                    </div>
+
+                    <div class="recommendations-card">
+                        <h3>Рекомендации по улучшению</h3>
+                        <ul class="recommendations-list">
+                            <li>
+                                <i class="fas fa-lightbulb"></i>
+                                <div>
+                                    <h4>Улучшить работу с возражениями</h4>
+                                    <p>Рекомендуется изучить дополнительные техники работы с возражениями по цене</p>
+                                </div>
+                            </li>
+                            <!-- Добавьт больше рекомендаций -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Добавляем секцию для отчетов -->
+            <section id="reports" class="section animate__animated animate__fadeIn">
+                <h1>Отчеты</h1>
+                
+                <div class="reports-grid">
+                    <!-- Генерация отчетов -->
+                    <div class="report-card">
+                        <div class="card-header">
+                            <i class="fas fa-file-alt"></i>
+                            <h2>Генерация отчетов</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="report-types">
+                                <div class="report-type">
+                                    <h3>Ежедневный отчет</h3>
+                                    <p>Статистика звонков и продаж за день</p>
+                                    <button class="generate-report">Сгенерировать</button>
+                                </div>
+                                <div class="report-type">
+                                    <h3>Еженедельный отчет</h3>
+                                    <p>Анализ эффективности за неделю</p>
+                                    <button class="generate-report">Сгенерировать</button>
+                                </div>
+                                <div class="report-type">
+                                    <h3>Месячный отчет</h3>
+                                    <p>Полная статистика за месяц</p>
+                                    <button class="generate-report">Сгенерировать</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Экспорт данных -->
+                    <div class="report-card">
+                        <div class="card-header">
+                            <i class="fas fa-file-export"></i>
+                            <h2>Экспорт данных</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="export-options">
+                                <button class="export-btn excel">
+                                    <i class="fas fa-file-excel"></i>
+                                    Экспорт в Excel
+                                </button>
+                                <button class="export-btn pdf">
+                                    <i class="fas fa-file-pdf"></i>
+                                    Экспорт в PDF
+                                </button>
+                                <button class="export-btn csv">
+                                    <i class="fas fa-file-csv"></i>
+                                    Экспорт в CSV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Настройка расписания -->
+                    <div class="report-card">
+                        <div class="card-header">
+                            <i class="fas fa-clock"></i>
+                            <h2>Настройка расписания</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="schedule-settings">
+                                <div class="schedule-item">
+                                    <label>Ежедневный отчет</label>
+                                    <input type="time" value="23:00">
+                                    <button class="save-schedule">Сохранить</button>
+                                </div>
+                                <div class="schedule-item">
+                                    <label>Еженедельный отчет</label>
+                                    <select>
+                                        <option>Понедельник</option>
+                                        <option>Вторник</option>
+                                        <option>Среда</option>
+                                        <option>Четверг</option>
+                                        <option>Пятница</option>
+                                    </select>
+                                    <button class="save-schedule">Сохранить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Шаблоны отчетов -->
+                    <div class="report-card">
+                        <div class="card-header">
+                            <i class="fas fa-file-code"></i>
+                            <h2>Шаблоны отчетов</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="templates-list">
+                                <div class="template-item">
+                                    <span>Базовый отчет</span>
+                                    <div class="template-actions">
+                                        <button class="edit-template"><i class="fas fa-edit"></i></button>
+                                        <button class="delete-template"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                <div class="template-item">
+                                    <span>Расширенный отчет</span>
+                                    <div class="template-actions">
+                                        <button class="edit-template"><i class="fas fa-edit"></i></button>
+                                        <button class="delete-template"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                <button class="add-template">
+                                    <i class="fas fa-plus"></i>
+                                    Добавить шаблон
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="analytics" class="section">
+                <h1>Аналитика</h1>
+                
+                <div class="analytics-grid">
+                    <!-- етальная статистика -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-bar"></i>
+                            <h2>Детальная статистика</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="stats-container">
+                                <div class="stat-item">
+                                    <h3>Эффективность продаж</h3>
+                                    <div class="stat-value">87%</div>
+                                    <div class="stat-change positive">+12% с прошлого месяца</div>
+                                </div>
+                                <div class="stat-item">
+                                    <h3>Среднее время разговора</h3>
+                                    <div class="stat-value">5:23</div>
+                                    <div class="stat-change negative">-1:30 с прошлой недели</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Сравнительны анализ -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <i class="fas fa-balance-scale"></i>
+                            <h2>Сравнительный анализ конверсии</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-container" style="height: 400px; width: 100%; max-width: 1600px; overflow: hidden;">
+                                <h2>Сравнительный анализ конверсии</h2>
+                                <canvas id="comparisonChart"></canvas>
+                            </div>
+                            <div class="comparison-legend">
+                                <div class="legend-item">
+                                    <span class="legend-color current"></span>
+                                    <span>Текущий период</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color previous"></span>
+                                    <span>Предыдущий период</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Прогнозирование -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h2>Прогнозирование</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="forecast-metrics">
+                                <div class="metric">
+                                    <h3>Прогноз продаж</h3>
+                                    <div class="metric-value">₽1.5M</div>
+                                    <div class="metric-period">Следующий месяц</div>
+                                </div>
+                                <div class="metric">
+                                    <h3>Ожидаемая конверсия</h3>
+                                    <div class="metric-value">25%</div>
+                                    <div class="metric-period">К концу квартала</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </section>
+
+            <!-- Добавляем сецию Виртуальный тренер -->
+            <section id="trainer" class="section">
+                <!-- Добавляем интерфейс ат-бота -->
+                <div class="chatbot-interface">
+                    <div class="card-header">
+                        <i class="fas fa-robot"></i>
+                        <h2>Aimy Тренер</h2>
+                    </div>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <!-- Сообщения будут добавляться динамически -->
+                            <div class="message bot">
+                                <div class="message-content">
+                                    Здравствуйте! Я ваш виртуальный тренер по продажам. Готов помочь вам улучшить навыки продаж и работы с клиентами. Выберите интересующую вас тему или задайте вопрос.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Быстрые команды -->
+                        <div class="quick-commands">
+                            <button class="command-btn">Закрыть диолог</button>
+                            <button class="command-btn">Показать татистику диолога</button>
+                            <button class="command-btn">Показать стастиску диологов</button>
+
+                        </div>
+
+                        <div class="chat-input">
+                            <textarea id="userInput" placeholder="Введите ваше сообщение..."></textarea>
+                            <button id="sendMessage">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button id="startVoice">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Контекстная панель -->
+                
+
+                <div class="trainer-grid">
+                    <!-- Сценарии обучения -->
+                    <div class="trainer-card">
+                        <div class="card-header">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h2>Сценарии обучения</h2>
+                        </div>
+                        <div class="scenarios-list">
+                            <div class="scenario-item">
+                                <span>Базовый курс продаж</span>
+                                <button class="start-scenario">Начать</button>
+                            </div>
+                            <div class="scenario-item">
+                                <span>Работа с возражениями</span>
+                                <button class="start-scenario">Начать</button>
+                            </div>
+                            <div class="scenario-item">
+                                <span>Техники закрытия сделок</span>
+                                <button class="start-scenario">Начать</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI-коуиг -->
+                    <div class="trainer-card">
+                        <div class="card-header">
+                            <i class="fas fa-robot"></i>
+                            <h2>AI-коучинг</h2>
+                        </div>
+                        <div class="ai-coach">
+                            <p>Персональные тренировки с искусственным интеллектом</p>
+                            <button class="start-session">Начать сессию</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Практические упражнения -->
+                    <div class="trainer-card">
+                        <div class="card-header">
+                            <i class="fas fa-dumbbell"></i>
+                            <h2>Практические упражнения</h2>
+                        </div>
+                        <div class="exercises-list">
+                            <div class="exercise">
+                                <h3>Холодные звонки</h3>
+                                <p>Прогресс: 7/10</p>
+                                <button class="continue-exercise">Продолжить</button>
+                            </div>
+                            <div class="exercise">
+                                <h3>Презентация продукта</h3>
+                                <p>Прогресс: 5/10</p>
+                                <button class="continue-exercise">Продолжить</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Прогресс обучения -->
+                    <div class="trainer-card">
+                        <div class="card-header">
+                            <i class="fas fa-chart-line"></i>
+                            <h2>Прогресс обучения</h2>
+                        </div>
+                        <div class="progress-stats">
+                            <div class="stat">
+                                <span class="label">Общий прогресс</span>
+                                <span class="value">75%</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Завершено курсов</span>
+                                <span class="value">8/12</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Рейтинг сотрудников -->
+                    <div class="trainer-card">
+                        <div class="card-header">
+                            <i class="fas fa-trophy"></i>
+                            <h2>Рейтинг сотрудиков</h2>
+                        </div>
+                        <div class="rating-list">
+                            <div class="rating-item">
+                                <span class="position">1</span>
+                                <span class="name">Иванов Иван</span>
+                                <span class="score">98</span>
+                            </div>
+                            <div class="rating-item">
+                                <span class="position">2</span>
+                                <span class="name">Петров Петр</span>
+                                <span class="score">95</span>
+                            </div>
+                            <div class="rating-item">
+                                <span class="position">3</span>
+                                <span class="name">Сидоров Сидор</span>
+                                <span class="score">92</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- В секции настроек аккаунта -->
+            <section id="settings" class="section">
+                <h1>Настройки</h1>
+                
+                <!-- Настройки аккаунта -->
+                <div class="settings-card">
+                    <h2><i class="fas fa-user-circle"></i> Настройки аккаунта</h2>
+                    <div class="account-settings">
+                        <!-- Существующее поле имени -->
+                        <div class="settings-group">
+                            <label>Имя пользователя</label>
+                            <div class="input-group">
+                                <input type="text" id="userName" placeholder="Введите имя">
+                                <button class="save-settings" style="width: 600px; border-radius: 20px;" id="saveUserName">Сохранить</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Добавляем поле даты рождения -->
+                        <div class="settings-group">
+                            <label>Дата рождения</label>
+                            <div class="input-group">
+                                <input type="date" id="userBirthdate">
+                                <button class="save-settings" id="saveBirthdate" style="width: 600px; border-radius: 20px;">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Сущетвующие настрйки темы -->
+                <div class="settings-card">
+                    <h2><i class="fas fa-palette"></i> Настройка емы</h2>
+                    <div class="theme-settings">
+                        <!-- сновной цвет -->
+                        <div class="color-picker-group">
+                            <label>Основной цвет</label>
+                            <input type="color" id="primaryColor" value="#1E3B6C">
+                            <button class="reset-color" data-color="primary">Сбросить</button>
+                        </div>
+                        
+                        <!-- Дополнительный цвет -->
+                        <div class="color-picker-group">
+                            <label>Дополнительный цвет</label>
+                            <input type="color" id="secondaryColor" value="#0A244D">
+                            <button class="reset-color" data-color="secondary">Сбросить</button>
+                        </div>
+                        
+                        <!-- Цвет текста -->
+                        <div class="color-picker-group">
+                            <label>Цвет текст</label>
+                            <input type="color" id="textColor" value="#000000">
+                            <button class="reset-color" data-color="text">Сбросить</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loader -->
+    <div id="loader" class="loader hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Модальные окна -->
+    <div class="modal" id="generalModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-body">
+                <!-- Содержимое модального окна -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомления -->
+    <div class="notifications-container">
+        <!-- Уведомления будут добавляться динамически -->
+    </div>
+
+    <!-- Добавьте второе модальное окно для транскрипции -->
+    <div id="transcriptModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <iframe id="transcriptFrame" style="width:100%; height:85vh; border:none;"></iframe>
+        </div>
+    </div>
+
+    <!-- Модальное окно для анализа -->
+    <div id="analysisModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <iframe id="analysisFrame" style="width:100%; height:85vh; border:none;"></iframe>
+        </div>
+    </div>
+
+    <!-- Модальное окно для аудио -->
+    <div id="audioModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <audio id="audioPlayer" controls style="width: 100%;">
+                <source id="audioSource" src="" type="audio/wav">
+                Ваш браузер не поддерживает аудиоэлемент.
+            </audio>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/virtual-trainer.js"></script>
+    
+    <script>
+    // Функция для показа только активной секции
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.display = 'none';
+        });
+        
+        const activeSection = document.getElementById(sectionId);
+        if (activeSection) {
+            activeSection.style.display = 'block';
+        }
+    }
+
+    // Обрабочик клика по пунктам меню
+    document.querySelectorAll('.sidebar-nav a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const sectionId = link.getAttribute('href').substring(1);
+            showSection(sectionId);
+        });
+    });
+
+    // При загрузке страницы показываем дашборд
+    document.addEventListener('DOMContentLoaded', () => {
+        const hash = window.location.hash.substring(1) || 'dashboard';
+        showSection(hash);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const salesChartElement = document.getElementById('salesChart');
+        if (!salesChartElement) {
+            console.error('Элемент с ID "salesChart" не найден');
+            return;
+        }
+        // Ваш код для создания графика
+    });
+
+    // Объект с данными о менеджерах по командам
+    const teamManagers = {
+        sirens: [
+            "Соколова Юлия",
+            "Петрова Мария",
+            "Иванова Юлия", 
+            "Смирнова Татьяна",
+            "Морозова Юлия",
+            "Волкова Виктория",
+            "Козлова Татьяна",
+            "Новикова Екатерина",
+            "Макарова Анастасия",
+            "Попова Ангелина",
+            "Лебедева Елена",
+            "Семенова Злата",
+            "Егорова Кристина"
+        ],
+        bossgirl: [
+            "Павлова Александра",
+            "Степанова Вероника", 
+            "Николаева Елена",
+            "Орлова Евгения",
+            "Андреева Светлана",
+            "Михайлова Александра",
+            "Федорова Альвина",
+            "Зайцева Мария",
+            "Сергеева Виктория",
+            "Романова Виктория",
+            "Захарова Ангелина",
+            "Борисова Кристина"
+        ],
+        mayatnik: [
+            "Королева Малика",
+            "Герасимова Александра",
+            "Пономарева Александра",
+            "Григорьева Виктория",
+            "Лазарева Валерия",
+            "Медведева Гульмира",
+            "Ершова Валерия",
+            "Никитина Дарья",
+            "Соловьева Камила",
+            "Тимофеева Ольга",
+            "Фомина Анна",
+            "Беляева Алина"
+        ],
+        queens: [
+            "Комарова Мария",
+            "Дмитриева Татьяна",
+            "Кузнецова Надежда",
+            "Поляков Анастасия",
+            "Богданова Ксения",
+            "Жукова Дарья",
+            "Миронова Влада",
+            "Осипова Александра",
+            "Белова Елизавета",
+            "Максимова Кристина",
+            "Сидорова Анастасия",
+            "Антонова Анна"
+        ]
+    };
+
+    // Функция для обновления списка менеджеров
+    function updateManagersList(teamValue) {
+        const managerSelect = document.getElementById('managerFilter');
+        managerSelect.innerHTML = '<option value="all">Все менеджеры</option>';
+
+        if (teamValue === 'all') {
+            // Если выбраны все команды, добавляем всех менеджеров
+            Object.values(teamManagers).flat().forEach(manager => {
+                const option = document.createElement('option');
+                option.value = manager;
+                option.textContent = manager;
+                managerSelect.appendChild(option);
+            });
+        } else {
+            // Добавляем менеджеров только выбранной команды
+            teamManagers[teamValue].forEach(manager => {
+                const option = document.createElement('option');
+                option.value = manager;
+                option.textContent = manager;
+                managerSelect.appendChild(option);
+            });
+        }
+    }
+
+    // Добавляем слушатель события при загрузке страницы
+    document.addEventListener('DOMContentLoaded', () => {
+        const teamFilter = document.getElementById('teamFilter');
+        
+        // Обновляем список менеджеров при изменении команды
+        teamFilter.addEventListener('change', (e) => {
+            updateManagersList(e.target.value);
+        });
+
+        // Инициализируем список менеджеров при загрузке
+        updateManagersList('all');
+    });
+    </script>
+</body>
+</html> 

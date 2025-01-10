@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ панель</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <h1>Админ панель</h1>
+    <h2>Создание пользователя</h2>
+    <form id="createUserForm">
+        <input type="text" id="newLogin" placeholder="Логин" required>
+        <input type="password" id="newPassword" placeholder="Пароль" required>
+        <button type="submit">Создать пользователя</button>
+    </form>
+    <h2>Удаление пользователя</h2>
+    <input type="text" id="deleteLogin" placeholder="Логин для удаления">
+    <button id="deleteUser">Удалить пользователя</button>
+
+    <script>
+        const Users = {
+            admin: { password: btoa("admin123"), admin: true } // Пароль зашифрован
+        };
+
+        document.getElementById('createUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newLogin = document.getElementById('newLogin').value;
+            const newPassword = btoa(document.getElementById('newPassword').value); // Шифрование пароля
+            Users[newLogin] = { password: newPassword, admin: false }; // Создание нового пользователя
+            alert('Пользователь создан');
+        });
+
+        document.getElementById('deleteUser').addEventListener('click', function() {
+            const deleteLogin = document.getElementById('deleteLogin').value;
+            if (Users[deleteLogin]) {
+                delete Users[deleteLogin]; // Удаление пользователя
+                alert('Пользователь удален');
+            } else {
+                alert('Пользователь не найден');
+            }
+        });
+    </script>
+</body>
+</html> 
